@@ -17,4 +17,6 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 echo "- Install Vim plugins"
+sudo apt install python3-pynvim vim-gtk3 python3-msgpack
+pip3 install --break-system-packages --user pynvim
 vim +PlugInstall +qall

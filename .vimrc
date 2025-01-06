@@ -4,12 +4,20 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'vim-scripts/mru.vim'
 Plug 'dracula/vim'
 Plug 'itchyny/lightline.vim'
+Plug 'dense-analysis/ale'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-file.vim'
-Plug 'dense-analysis/ale'
+Plug 'rhysd/vim-lsp-ale'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'lighttiger2505/deoplete-vim-lsp'
+Plug 'Shougo/neco-syntax'
+" Plug 'deoplete-plugins/deoplete-jedi'
 call plug#end()
 
 if has("win16") || has("win32")
@@ -299,7 +307,7 @@ au FileType gitcommit call setpos('.', [0, 1, 1, 0])
 if has("autocmd")
     au BufNewFile,BufRead *.nml set filetype=fortran
     au BufNewFile,BufRead *.nam set filetype=fortran
-    au BufNewFile,BufRead *.nam ALEToggle
+    " au BufNewFile,BufRead *.nam ALEToggle
 endif
 
 
@@ -346,8 +354,6 @@ let g:lightline = {
       \ }
 
 
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => NERD Commenter
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -376,6 +382,12 @@ nnoremap <F6> :ToggleWhitespace<CR>
 let g:dracula_italic = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => deoplete
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:deoplete#enable_at_startup = 1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => LSP related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
@@ -384,20 +396,32 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
       \ 'priority': 10,
       \ 'completor': function('asyncomplete#sources#file#completor')
       \ }))
-
-let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
+au User asyncomplete_setup call asyncomplete#ale#register_source({
+    \ 'name': 'reason',
+    \ 'linter': 'flow',
+    \ })
+let g:lsp_diagnostics_enabled = 0        " disable diagnostics support
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_fixers = {'python': ['ruff', 'ruff_format']}
-
+" let g:ale_fixers = {'python': ['ruff', 'ruff_format']}
+let g:ale_linters = {
+     \   'json': ['jq'],
+     \   'yaml': ['yaml-language-server'],
+     \ }
+" let b:json_vscodejson_executable = lsp_settings#exec_path('json-languageserver')
+let g:ale_vim_vimls_executable = lsp_settings#exec_path('vim-language-server')
+let g:ale_python_ruff_executable = lsp_settings#exec_path('ruff')
+let g:ale_javascript_tsserver_executable = lsp_settings#exec_path('typescript-language-server')
+let g:ale_yaml_ls_executable = lsp_settings#exec_path('yaml-language-server')
+let g:ale_sh_language_server_executable = lsp_settings#exec_path('bash-language-server')
 " Set this variable to 1 to fix files when you save them.
 " let g:ale_fix_on_save = 1
 let g:ale_sign_error = '!!'
 let g:ale_sign_warning = '>>'
 let g:ale_virtualtext_cursor = 'current'
-" let g:ale_completion_enabled = 0
+let g:ale_completion_enabled = 0
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
