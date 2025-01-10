@@ -23,7 +23,11 @@ call plug#end()
 if has("win16") || has("win32")
   set pythonthreehome=C:\Python\miniforge3
   set pythonthreedll=C:\Python\miniforge3\python3.dll
+else
+  set pythonthreehome=/usr
+  set pythonthreedll=/usr/lib/x86_64-linux-gnu/libpython3.11.so
 endif
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
