@@ -10,13 +10,14 @@ echo "- Install nvm"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
 
 echo "- Install nodejs 20"
-nvm install 20
+nvm install --lts
 
 echo "- Install Vim Plug"
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 echo "- Install Vim plugins"
-sudo apt install python3-pynvim vim-gtk3 python3-msgpack
+sudo apt install python3-greenlet python3-typing-extensions vim-gtk3 python3-msgpack
 pip3 install --break-system-packages --user pynvim
+curl -L https://github.com/machsix/dotfile/raw/master/.vimrc -o ~/.vimrc
 vim +PlugInstall +qall
